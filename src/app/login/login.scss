@@ -1,0 +1,54 @@
+@import "../../style/variable";
+
+.img_wrapper {
+  display: flex;
+  justify-content: center;
+  width: 15%;
+
+  img {
+    display: flex;
+    object-fit: contain;
+    width: 100%;
+  }
+}
+
+.full_wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: $secondary;
+}
+
+.card {
+  position: relative;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  height: 80%;
+
+  .form_wrapper {
+    width: 50%;
+  }
+
+  .action {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-top: 1.5em;
+
+    button {
+        width: 75%;
+    }
+  }
+}
+
+.form-group {
+  margin: 0.5em 0;
+
+  label {
+    margin-bottom: 0.25em;
+  }
+}

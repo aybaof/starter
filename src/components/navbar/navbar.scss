@@ -1,0 +1,69 @@
+@import "../../style/variable";
+
+.navbar {
+    display: flex;
+    width: 100%;
+    height: 10%;
+    flex-flow: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5em;
+    background-color : $tertiary;
+
+    &-logo {
+        width: 15%;
+        display :flex;
+        object-fit: contain;
+        height: 100%;
+
+        img {
+            display: flex;
+            width: 100%;
+            object-fit: contain;
+        }
+
+    }
+
+    &-links {
+        width: 25%;
+        display: flex;
+        justify-content: space-around;
+    }
+
+}
+
+.text_link {
+    text-decoration: none;
+    color: black;
+    font-size: 1em;
+    transition: all 300ms ease-in-out;
+
+    &:hover {
+        color: $secondary;
+        text-underline-offset: 3px;
+        text-decoration: underline;
+        text-decoration-color: $primary;
+    }
+}
+
+.add_post {
+    width : 50px;
+    height: 50px;
+    position: fixed;
+    right : 15px;
+    bottom: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    background-color: $secondary;
+
+    &:hover > svg , &:active > svg {
+        color: black;
+        scale: 1.1;
+    }
+    svg {
+        color: $primary;
+        transition: all 0.3s;
+    }
+}
