@@ -1,0 +1,51 @@
+version: "3.8"
+networks:
+  mynet:
+services:
+  nodeserver:
+    container_name: groupomania_api
+    build: ./Backend/
+    depends_on:
+      - mariadb
+    ports:
+      - 5000:5000
+    volumes:
+      - ./Backend/:/usr/src/app
+    env_file:
+      - .env
+  reactapp:
+    container_name: groupamania_client
+    build: ./Frontend/
+    depends_on:
+      - nodeserver
+    ports: 
+      - 4800:4800
+    volumes:
+      - ./Frontend/:/usr/src/app
+  mariadb:
+    container_name: bdd_groupomania
+    image: mariadb:latest
+    ports:
+      - 3306:3306
+    environment:
+      - MARIADB_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=groupomania
+      - MYSQL_USER=aybaof
+      - MYSQL_PASSWORD=999345
+    volumes:
+      - ./Groupomania.sql:/docker-entrypoint-initdb.d/Groupomania.sql
+  nginx:
+    build: ./nginx
+    ports:
+      - 80:80
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    ports:
+      - 8080:80
+    environment:
+      PMA_HOST: mariadb
+      PMA_PORT: "3306"
+      PMA-USER: aybaof
+      PMA-PASSWORD: 999345
+    depends_on:
+      - mariadb
