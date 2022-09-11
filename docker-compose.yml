@@ -10,18 +10,20 @@ services:
     ports:
       - 5000:5000
     volumes:
-      - ./Backend/:/usr/src/app
+      - ./:/usr/src/app
     env_file:
       - .env
   reactapp:
     container_name: groupamania_client
+    environment:
+      - WATCHPACK_POLLING=TRUE
     build: ./Frontend/
     depends_on:
       - nodeserver
     ports: 
       - 4800:4800
     volumes:
-      - ./Frontend/:/usr/src/app
+      - ./:/usr/src/app
   mariadb:
     container_name: bdd_groupomania
     image: mariadb:latest

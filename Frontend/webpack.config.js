@@ -54,8 +54,15 @@ module.exports = {
     }),
     new MiniCssExtractPlugin()
   ],
+
+  watchOptions :{
+    aggregateTimeout : 300,
+    poll : 1000
+  },
   devServer : {
     port : 4800,
+    host : '0.0.0.0',
+    hot : true,
     historyApiFallback : true,
   }
 };

@@ -1,24 +1,23 @@
-import "./login.scss";
+import "./signup.scss";
 import React from "react";
 
 import { useNavigate } from "react-router-dom";
-import  useAuth  from "../auth.jsx";
-
 import icon from "../../assets/logo/icon-left-font-monochrome-black.png";
 
-const Login = () => {
+const SignUp = () => {
   const navigate = useNavigate();
-  const { login } = useAuth();
-
-  const handleLogin = async () => {
-    await login();
-    navigate("/");
-  };
-
-  const goToSignUp = () => {
-    navigate("/signup")
+  const makeForm = async () => {
+    return await new Promise(resolve => {
+        let object = {};
+        document.querySelectorAll("input").forEach(item => {
+            object[item.name] = item.value
+        })
+        resolve(object)  
+    })
   }
-
+  const handleSignUp = async (e) => {
+      const form = await makeForm();
+  };
   return (
     <div className="full_wrapper">
       <div className="card">
@@ -26,7 +25,7 @@ const Login = () => {
           <img src={icon} alt="logo groupomania"></img>
         </div>
         <div className="form_wrapper">
-          <h2>Connexion</h2>
+          <h2>Inscription</h2>
           <div className="form-group">
             <label htmlFor="email_user">Email</label>
             <input type="text" name="email_user"></input>
@@ -36,11 +35,7 @@ const Login = () => {
             <input type="password" name="password_user"></input>
           </div>
           <div className="action">
-            <button className="btn-primary" onClick={handleLogin}>
-              Connexion
-            </button>
-            <p>Pas encore de compte ?</p>
-            <button className="btn-tertiary" onClick={goToSignUp}>Inscription</button>
+            <button className="btn-primary" onClick={handleSignUp}>Inscription</button>
           </div>
         </div>
       </div>
@@ -48,4 +43,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default SignUp;

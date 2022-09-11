@@ -2,6 +2,7 @@ import "../style/style.scss";
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Login from "./login/login.jsx";
+import SignUp from "./signup/signup.jsx"
 import Dashboard from "./dashboard/dashboard.jsx";
 import useAuth from "./auth.jsx";
 
@@ -30,6 +31,7 @@ const App = () => {
         }
       />
       <Route path="/login" element={<Login />}/>
+      <Route path="/signup" element={<SignUp/>}/>
     </Routes>
   );
 };

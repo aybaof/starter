@@ -1,6 +1,9 @@
 {
     "scripts": {
-        "server" : "cd Backend && npm start",
-        "client" : "cd Frontend && npm start"
+        "server": "cd Backend && npm start",
+        "client": "cd Frontend && npm start"
+    },
+    "dependencies": {
+        "object-hash": "^3.0.0"
     }
 }
