@@ -1,9 +1,9 @@
 import { HttpClient } from "../HttpClient";
 
 export class AuthClient extends HttpClient{
-    constructor(baseURL){
+    constructor(_baseURL){
         super({
-            baseURL
+            _baseURL
         })
     }
 

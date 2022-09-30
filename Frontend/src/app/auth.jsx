@@ -5,6 +5,7 @@ import { AuthClient } from "../module/Api/auth";
 const authContext = React.createContext();
 
 const AuthApi = new AuthClient("http://localhost:5000/api/");
+
 // function useAuth() {
 //   return {
 //     authed,
@@ -34,6 +35,7 @@ export function AuthProvider({ children }) {
   };
 
   const signUp = async (user = {}) => {
+    console.log(AuthApi._baseURL)
     const res = await AuthApi.Auth.create(user);
     if(res.success) setAuthed(true);
     return true
