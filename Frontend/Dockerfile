@@ -4,7 +4,7 @@ FROM node:16
 
     COPY package*.json ./
 
-    RUN npm install
+    RUN cd /usr/src/app/Frontend && npm install
 
     EXPOSE 4800
 

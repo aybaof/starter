@@ -1,8 +1,10 @@
 import * as React from "react";
 import { Navigate } from "react-router-dom";
+import { AuthClient } from "../module/Api/auth";
 
 const authContext = React.createContext();
 
+const AuthApi = new AuthClient("http://localhost:5000/api/");
 // function useAuth() {
 //   return {
 //     authed,
@@ -31,6 +33,12 @@ export function AuthProvider({ children }) {
     });
   };
 
+  const signUp = async (user = {}) => {
+    const res = await AuthApi.Auth.create(user);
+    if(res.success) setAuthed(true);
+    return true
+  }
+
   const signOut = () => {
     return new Promise((res) => {
       setAuthed(false);
@@ -41,7 +49,8 @@ export function AuthProvider({ children }) {
   const value = {
     login: login,
     signOut: signOut,
-    authed: authed,
+    signUp : signUp,
+    authed: authed
   };
 
   return <authContext.Provider value={value}>{children}</authContext.Provider>;

@@ -4,7 +4,7 @@ FROM node:16
 
     COPY package*.json ./
 
-    RUN npm install && npm i --location=global nodemon
+    RUN cd /usr/src/app/Backend && npm install && npm i --location=global nodemon
 
     EXPOSE 5000
 

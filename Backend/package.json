@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon -L index.js",
+    "start": "nodemon -L --inspect=0.0.0.0 index.js",
     "update": "npx npm-check-updates -u && npm install"
   },
   "author": "Aymeric Barakat",
