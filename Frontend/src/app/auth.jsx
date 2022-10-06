@@ -5,7 +5,7 @@ import { AuthClient } from "../module/Api/auth";
 const authContext = React.createContext();
 
 const AuthApi = new AuthClient("http://localhost:5000/api/");
-
+AuthApi.setHeader("Content-Type" , "application/json")
 // function useAuth() {
 //   return {
 //     authed,

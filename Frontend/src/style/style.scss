@@ -32,6 +32,9 @@ body {
 }
 
 .p- {
+    &0 {
+        padding: 0;
+    }
     &1 {
         padding: 0.25em;
     }
@@ -47,7 +50,39 @@ body {
     &5 {
         padding: 1,5em;
     }
+    &auto {
+        padding: auto;
+    }
 }
+
+.m- {
+
+    &0{
+        margin: 0;
+    }
+
+    &1 {
+        margin: 0.25em;
+    }
+    &2 {
+        margin: 0.50em;
+    }
+    &3 {
+        margin: 0.75em;
+    }
+    &4 {
+        margin: 1em;
+    }
+    &5 {
+        margin: 1,5em;
+    }
+
+    &auto {
+        margin: auto;
+    }
+}
+
+
 
 input {
     border: none;
@@ -114,6 +149,16 @@ input {
             outline:none;
             box-shadow:  0 0 2px $tertiary;
         }
+    }
+}
+
+p {
+    &.sm {
+        font-size: 0.8em;
+    }
+
+    &.faded {
+        opacity: 0.6;
     }
 }
 

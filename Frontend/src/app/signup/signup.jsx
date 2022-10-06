@@ -42,6 +42,7 @@ const SignUp = () => {
 		  <div className="form-group">
 			<label htmlFor="password_user">Mot de passe</label>
 			<input type="password" name="password_user"></input>
+			<p className="faded sm m-0">Min 7 character 1 uppercase 1 lowercase 1 symbol</p>
 		  </div>
 		  <div className="action">
 			<button className="btn-primary" onClick={handleSignUp}>Inscription</button>

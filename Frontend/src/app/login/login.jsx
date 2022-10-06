@@ -11,7 +11,8 @@ const Login = () => {
   const { login } = useAuth();
 
   const handleLogin = async () => {
-    await login();
+    const res = await login();
+    if(!res.success) return alert("Impossible de se connecter")
     navigate("/");
   };
 

@@ -9,6 +9,15 @@ export class HttpClient {
         return this;
     }
 
+    getHeader(key){
+        return this._headers[key]
+    }
+
+    setBearerAuth(token) {
+        this._headers.Authorization = `Bearer ${token}`;
+        return this;
+    }
+
     async _fetchApi(endpoint , options = {}){
         const res = await fetch(this._baseURL + endpoint , {
             ...options,
