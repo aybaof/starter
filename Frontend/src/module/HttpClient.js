@@ -15,6 +15,7 @@ export class HttpClient {
 
     setBearerAuth(token) {
         this._headers.Authorization = `Bearer ${token}`;
+        window.localStorage.setItem("Authorization" , token);
         return this;
     }
 
@@ -26,7 +27,15 @@ export class HttpClient {
 
         if(!res.ok) throw new Error(res.statusText);
 
-        if(options.parseReponse !== false && res.status !== 204) return await res.json()
+        if(options.parseReponse !== false && res.status !== 204){
+            const data = await res.json()
+            const newToken = res.headers.get("Refresh-Token") || false
+            if(newToken){
+                this.setBearerAuth(newToken)
+                window.localStorage.setItem("Authorization" , newToken);
+            }
+            return data  
+        }  
 
         return undefined
     }
@@ -74,3 +83,10 @@ export class HttpClient {
         )
     }
 }
+
+export const HttpInstance = new HttpClient({
+    _baseURL : "http://localhost:5000/api/" ,
+    _headers : {
+        "Content-Type" : "application/json"
+    }
+});

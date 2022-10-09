@@ -19,6 +19,10 @@
             // 6. Connect to /node directory of docker
             "remoteRoot": "/usr/src/app/Backend",
             "address": "localhost",
+            "skipFiles": [
+                "<node_internals>/**",
+                "${workspaceFolder}/node_modules/**"
+            ]
         }
     ]
 }

@@ -25,10 +25,15 @@
   display: flex;
   flex-flow: column;
   align-items: center;
+  justify-content: space-around;
   height: 80%;
+  background-color: white;
+  border-radius: 5px;
 
   .form_wrapper {
-    width: 50%;
+    justify-content: space-around;
+    display: flex;
+    flex-flow: column;
   }
 
   .action {
@@ -38,10 +43,6 @@
     justify-content: center;
     width: 100%;
     margin-top: 1.5em;
-
-    button {
-        width: 75%;
-    }
   }
 }
 
@@ -52,3 +53,5 @@
     margin-bottom: 0.25em;
   }
 }
+
+

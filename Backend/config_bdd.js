@@ -39,6 +39,7 @@ exports.linkBDD = mariadb.createPool({
   connectionLimit: 10,
 });
 
+
 exports.pingBdd = () => {
   const conn = mariadb.createPool({
     host: process.env.DB_HOST,

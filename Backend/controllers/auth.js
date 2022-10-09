@@ -1,6 +1,6 @@
 const { linkBDD } = require("../config_bdd")
 const crypto = require('crypto')
-const CryptoJS = require("crypto-js");
+const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const validator = require("validator");
 
@@ -11,10 +11,6 @@ const passwordRequirement = {
 	minNumber: 1,
 }
 
-const encodePasswordSha256 = (password) => {
-	const hash = CryptoJS.HmacSHA256(password, process.env.TOKEN);
-	return CryptoJS.enc.Base64.stringify(hash)
-}
 
 exports.signUp = async (req, res) => {
 	try {
@@ -26,15 +22,30 @@ exports.signUp = async (req, res) => {
 
 
 		const email = await validator.normalizeEmail(reqMail);
-		const password = encodePasswordSha256(reqPassword);
+		const password = await bcrypt.hash(reqPassword, 10);
 		const query = "INSERT INTO users (email_user , password_user , admin_user) VALUES (?,?,?)"
 		const value = [email, password, 0]
 		const insertUser = await linkBDD.query(query, value)
 		if (insertUser.insertId > 0) {
-			res.status(201).json({ success: true })
+			const token = jwt.sign(
+				{ id_user: insertUser.insertId },
+				crypto.createHash("sha256").update(process.env.TOKEN, "utf-8").digest("hex"),
+				{ expiresIn: "30m" });
+
+			const refreshToken = jwt.sign(
+				{ id_user: insertUser.insertId },
+				crypto.createHash("sha256").update(process.env.TOKEN, "utf-8").digest("hex"),
+				{ expireIn: "1d" }
+			)
+
+			res.cookie('jwt', refreshToken, {
+				httpOnly: true,
+				sameSite: 'None', secure: true,
+				maxAge: 24 * 60 * 60 * 1000
+			});
+
+			return res.status(201).json({ success: true, token: token })
 		}
-
-
 	} catch (err) {
 		console.log(err);
 		res.status(500).json(err)
@@ -47,16 +58,34 @@ exports.signIn = async (req, res) => {
 		const reqPassword = await validator.trim(req.body.password_user);
 
 		const email = await validator.normalizeEmail(reqMail);
-		const password = encodePasswordSha256(reqPassword);
 		const query = "SELECT id_user,password_user FROM users WHERE email_user = ?"
 		const userRequest = await linkBDD.query(query, [email]);
-
 		if (!userRequest) return res.status(404).json({ sucess: false, reason: "not found" });
-		if (password !== encodePasswordSha256(userRequest.password_user)) return res.status(401).json({success : false})
-		
-		const token = jwt.sign({id_user : userRequest.id_user} , process.env.TOKEN);
-		return res.status(200).json({success : true , token : token})
+		const user = userRequest[0]
+		const authorize = await bcrypt.compare(reqPassword, user.password_user);
+		if (!authorize) return res.status(401).json({ success: false })
+
+		const token = jwt.sign(
+			{ id_user: user.id_user },
+			crypto.createHash("sha256").update(process.env.TOKEN, "utf-8").digest("hex"),
+			{ expiresIn: "30m" });
+
+		const refreshToken = jwt.sign(
+			{ id_user: user.id_user },
+			crypto.createHash("sha256").update(process.env.TOKEN, "utf-8").digest("hex"),
+			{ expiresIn: "1d" }
+		)
+
+		res.cookie('jwt', refreshToken, {
+			httpOnly: true,
+			sameSite: 'None', secure: true,
+			maxAge: 24 * 60 * 60 * 1000
+		});
+
+		res.setHeader("Refresh-Token", token);
+
+		return res.status(200).json({ success: true, token: token })
 	} catch (error) {
-		return res.status(500).json({success : false , error : error})
+		return res.status(500).json({ success: false })
 	}
 }

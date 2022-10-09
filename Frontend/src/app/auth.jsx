@@ -1,44 +1,36 @@
 import * as React from "react";
-import { Navigate } from "react-router-dom";
 import { AuthClient } from "../module/Api/auth";
+import { HttpInstance } from "../module/HttpClient";
+
 
 const authContext = React.createContext();
 
-const AuthApi = new AuthClient("http://localhost:5000/api/");
-AuthApi.setHeader("Content-Type" , "application/json")
-// function useAuth() {
-//   return {
-//     authed,
-//     login() {
-//       return new Promise((res) => {
-//         setAuthed(true);
-//         res();
-//       });
-//     },
-//     logout() {
-//       return new Promise((res) => {
-//         setAuthed(false);
-//         res();
-//       });
-//     },
-//   };
-// }
+const AuthApi = new AuthClient(HttpInstance._baseURL , HttpInstance._headers);
+
 
 export function AuthProvider({ children }) {
-  const [authed, setAuthed] = React.useState(false);
+  const [authed, setAuthed] = React.useState();
+  const [jwt , setJwt] = React.useState(window.localStorage.getItem("Authorization") || "")
 
-  const login = () => {
-    return new Promise((res) => {
-      setAuthed(true);
-      res();
-    });
+  React.useEffect( () => {
+    HttpInstance.setBearerAuth(jwt);
+  } , [jwt])
+
+
+  const login = async (user) => {
+    const res = await AuthApi.Auth.login(user);
+    if(!res.success) return res 
+    setAuthed(true)
+    setJwt(res.token)
+    return res
   };
 
   const signUp = async (user = {}) => {
-    console.log(AuthApi._baseURL)
     const res = await AuthApi.Auth.create(user);
-    if(res.success) setAuthed(true);
-    return true
+    if(!res.success) return res
+    setAuthed(true);
+    setJwt(res.token)
+    return res
   }
 
   const signOut = () => {
@@ -52,7 +44,8 @@ export function AuthProvider({ children }) {
     login: login,
     signOut: signOut,
     signUp : signUp,
-    authed: authed
+    authed: authed,
+    jwt : jwt
   };
 
   return <authContext.Provider value={value}>{children}</authContext.Provider>;

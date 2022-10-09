@@ -10,15 +10,16 @@
 }
 
 body {
-    height : 100vh;
-    width : 100vw;
+    height: 100vh;
+    width: 100vw;
     font-size: calc(14px + (20 - 14) * ((100vw - 300px) / (1600 - 300)));
+    color: rgba($color: #000000, $alpha: 0.8);
 }
 
 
 #root {
-    width : 100%;
-    height : 100%;
+    width: 100%;
+    height: 100%;
 }
 
 .full_wrapper {
@@ -31,61 +32,107 @@ body {
     flex-flow: column;
 }
 
-.p- {
-    &0 {
-        padding: 0;
-    }
-    &1 {
-        padding: 0.25em;
-    }
-    &2 {
-        padding: 0.50em;
-    }
-    &3 {
-        padding: 0.75em;
-    }
-    &4 {
-        padding: 1em;
-    }
-    &5 {
-        padding: 1,5em;
-    }
-    &auto {
-        padding: auto;
+
+@each $name ,
+$font-weight in("bolder" : 700, "bold" : 600, "faded" : 400) {
+    .fs-#{$name} {
+        font-weight: $font-weight;
+
+        @for $i from 1 to 5 {
+
+            &-#{$i} {
+                font-weight: $font-weight;
+                font-size: 0.5em * $i;
+            }
+        }
     }
 }
 
-.m- {
+@each $abbr,
+$name in ("t": "top", "r": "right", "b": "bottom", "l": "left") {
+    @for $index from 0 through 5 {
+        .p#{$abbr}-#{$index} {
+            padding-#{$name}: calc(0.5rem * $index);
+        }
 
-    &0{
-        margin: 0;
+        .m#{$abbr}-#{$index} {
+            margin-#{$name}: calc(0.5rem * $index);
+        }
     }
+}
 
-    &1 {
-        margin: 0.25em;
-    }
-    &2 {
-        margin: 0.50em;
-    }
-    &3 {
-        margin: 0.75em;
-    }
-    &4 {
-        margin: 1em;
-    }
-    &5 {
-        margin: 1,5em;
-    }
-
-    &auto {
-        margin: auto;
+@each $name in (start, center, end) {
+    .text-#{$name} {
+        text-align: $name;
     }
 }
 
 
+$grid-breakpoints: (
+    xs: 0,
+    sm: 576px,
+    md: 768px,
+    lg: 992px,
+    xl: 1200px
+);
+
+
+$i: 0;
+
+@while $i <=100 {
+    $val: auto;
+    $k: $val;
+
+    @if $i  !=0 {
+        $val: unquote(($i)+'%');
+        $k: $i;
+    }
+
+    .w-#{$k} {
+        width: $val;
+    }
+
+    .h-#{$k} {
+        height: $val;
+    }
+
+    $i: $i + 5;
+}
+
+@each $key,
+$size in $grid-breakpoints {
+    @media (min-width: $size) {
+        $i: 0;
+
+        @while $i <=100 {
+            $val: auto;
+            $k: $val;
+
+            @if $i  !=0 {
+                $val: unquote(($i)+'%');
+                $k: $i;
+            }
+
+            .w-#{$key}-#{$k} {
+                width: $val;
+            }
+
+            .h-#{$key}-#{$k} {
+                height: $val;
+            }
+
+            $i: $i + 5;
+        }
+    }
+}
+
+button {
+    cursor: pointer;
+}
 
 input {
     border: none;
+    border : 1px solid black;
     padding: 0.5em;
     border-radius: 5px;
 
@@ -101,6 +148,7 @@ input {
 .btn {
 
     &-primary {
+        position: relative;
         background-color: $primary;
         color: black;
         display: flex;
@@ -108,29 +156,39 @@ input {
         align-items: center;
         border-radius: 5px;
         padding: 10px 15px;
-        border : 0;
+        border: 0;
         outline: none;
 
-        &:focus, &:hover {
-            outline:none;
-            box-shadow:  0 0 2px $primary;
+        &:focus,
+        &:hover,
+        &:active {
+            outline: none;
+            transition: all 0.3s ease-out;
+            transform: translateY(-1px);
+            box-shadow: 0 0 4px $primary;
+            box-shadow: $primary 0px 10px 25px -12px;
         }
     }
 
     &-secondary {
         background-color: $secondary;
+        position: relative;
         color: black;
         display: flex;
         justify-content: center;
         align-items: center;
         border-radius: 5px;
         padding: 10px 15px;
-        border : 0;
+        border: 0;
         outline: none;
 
-        &:focus, &:hover {
-            outline:none;
-            box-shadow:  0 0 2px $secondary;
+        &:focus,
+        &:hover,
+        &:active {
+            outline: none;
+            transition: all 0.3s ease-out;
+            transform: translateY(-1px);
+            box-shadow: $secondary 0px 10px 25px -12px;
         }
     }
 
@@ -142,12 +200,15 @@ input {
         align-items: center;
         border-radius: 5px;
         padding: 10px 15px;
-        border : 0;
+        border: 0;
         outline: none;
 
-        &:focus, &:hover {
-            outline:none;
-            box-shadow:  0 0 2px $tertiary;
+        &:focus,
+        &:hover {
+            outline: none;
+            transition: all 0.3s ease-out;
+            transform: translateY(-1px);
+            box-shadow: $tertiary 0px 10px 25px -12px;
         }
     }
 }
@@ -169,4 +230,7 @@ body::-webkit-scrollbar {
 html {
     scrollbar-width: none;
 }
-  
+
+input.invalid {
+    box-shadow: inset 7px 0px 0px -3px red;
+}
