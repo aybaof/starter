@@ -1,14 +1,18 @@
 FROM node:16
 
-    WORKDIR /usr/src/app/Frontend
+WORKDIR /usr/src/app/Frontend
 
-    COPY package*.json ./
+COPY package*.json ./
 
-    RUN cd /usr/src/app/Frontend && npm install
+RUN cd /usr/src/app/Frontend && npm install
 
-    EXPOSE 4800
+RUN chown -Rh node:node /usr/src/app
 
-    CMD ["npm", "start"]
+USER node
+
+EXPOSE 4800
+
+CMD [ "sh", "-c", "npm install && npm run start" ]
 
 
-    
+
