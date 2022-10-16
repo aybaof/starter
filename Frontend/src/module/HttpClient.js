@@ -1,7 +1,7 @@
 export class HttpClient {
     constructor(init = {}){
-        this._baseURL = init._baseURL || "";
-        this._headers = init._headers || {};
+        this._baseURL = init._baseURL || "http://localhost:5000/api/";
+        this._headers = init._headers || {"Content-Type" : "application/json"};
     }
 
     setHeader(key , value){
@@ -22,6 +22,7 @@ export class HttpClient {
     async _fetchApi(endpoint , options = {}){
         const res = await fetch(this._baseURL + endpoint , {
             ...options,
+            credentials: 'include',
             headers : this._headers
         })
 
@@ -40,7 +41,7 @@ export class HttpClient {
         return undefined
     }
 
-    get(endpoint , body = {}){
+    get(endpoint , options = {}){
         return this._fetchApi(
             endpoint,
             {
@@ -84,9 +85,4 @@ export class HttpClient {
     }
 }
 
-export const HttpInstance = new HttpClient({
-    _baseURL : "http://localhost:5000/api/" ,
-    _headers : {
-        "Content-Type" : "application/json"
-    }
-});
+export const HttpInstance = new HttpClient();

@@ -3,8 +3,8 @@ const crypto = require("crypto");
 
 module.exports = (req, res, next) => {
     try {
-        if(req.cookie?.jwt){
-            refreshToken = req.cookie.jwt
+        if(req.cookies.jwt){
+            refreshToken = req.cookies.jwt
             const decoded = jwt.verify(refreshToken , crypto.createHash("sha256").update(process.env.TOKEN, "utf-8").digest("hex"))
             if(req.body.id_user && req.body.id_user !== decoded.id_user) throw "Un probléme est survenu";
             const accessToken = jwt.sign(
