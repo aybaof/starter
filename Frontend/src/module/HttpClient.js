@@ -1,85 +1,107 @@
+import { toast } from "react-toastify";
+
 export class HttpClient {
-    constructor(init = {}){
-        this._baseURL = init._baseURL || "http://localhost:5000/api/";
-        this._headers = init._headers || {"Content-Type" : "application/json"};
+    constructor(init = {}) {
+        this._baseURL = init._baseURL || `api/`;
+        this._headers = init._headers || { "Content-Type": "application/json" };
     }
 
-    setHeader(key , value){
+    setHeader(key, value) {
         this._headers[key] = value;
         return this;
     }
 
-    getHeader(key){
+    getHeader(key) {
         return this._headers[key]
     }
 
     setBearerAuth(token) {
         this._headers.Authorization = `Bearer ${token}`;
-        window.localStorage.setItem("Authorization" , token);
+        window.localStorage.setItem("Authorization", token);
         return this;
     }
 
-    async _fetchApi(endpoint , options = {}){
-        const res = await fetch(this._baseURL + endpoint , {
+    async _fetchApi(endpoint, options = {}) {
+        try {
+            const res = await fetch(this._baseURL + endpoint, {
+                credentials: 'include',
+                headers: this._headers,
+                ...options
+            })
+
+            if (!res.ok) {
+                toast.warn(res.reason)
+                throw new Error(res.statusText);
+            }
+
+            if (options.parseReponse !== false && res.status !== 204) {
+                const data = await res.json()
+                const newToken = res.headers.get("Refresh-Token") || false
+                if (newToken) {
+                    this.setBearerAuth(newToken)
+                    window.localStorage.setItem("Authorization", newToken);
+                }
+                return data
+            }
+            return undefined
+        } catch (err) {
+            return false
+        }
+    }
+
+    async _formData(endpoint, body, options = {}) {
+        delete this._headers['Content-Type'];
+        const res = await this._fetchApi(
+            endpoint, {
             ...options,
-            credentials: 'include',
-            headers : this._headers
-        })
-
-        if(!res.ok) throw new Error(res.statusText);
-
-        if(options.parseReponse !== false && res.status !== 204){
-            const data = await res.json()
-            const newToken = res.headers.get("Refresh-Token") || false
-            if(newToken){
-                this.setBearerAuth(newToken)
-                window.localStorage.setItem("Authorization" , newToken);
-            }
-            return data  
-        }  
-
-        return undefined
+            body: body,
+            method: 'POST',
+            credentials: 'include'
+        }
+        )
+        this._headers['Content-Type'] = "application/json"
+        return res;
     }
 
-    get(endpoint , options = {}){
+    get(endpoint, options = {}) {
         return this._fetchApi(
             endpoint,
             {
                 ...options,
-                method : 'GET' 
+                method: 'GET'
             }
         )
     }
 
-    post(endpoint , body , options = {}){
+    post(endpoint, body, options = {}) {
         return this._fetchApi(
             endpoint,
             {
                 ...options,
-                body : JSON.stringify(body),
-                method : 'POST' 
+                body: JSON.stringify(body),
+                method: 'POST'
             }
         )
     }
 
-    put(endpoint , body , options = {}){
+    put(endpoint, body, options = {}) {
         return this._fetchApi(
             endpoint,
             {
                 ...options,
-                body : JSON.stringify(body),
-                method : 'PUT' 
+                body: JSON.stringify(body),
+                method: 'PUT'
             }
         )
     }
-    
-    delete(endpoint , body , options = {}){
+
+    delete(endpoint, body, options = {}) {
         return this._fetchApi(
             endpoint,
             {
                 ...options,
-                body : JSON.stringify(body),
-                method : 'DELETE'
+                body: JSON.stringify(body),
+                method: 'DELETE'
             }
         )
     }
