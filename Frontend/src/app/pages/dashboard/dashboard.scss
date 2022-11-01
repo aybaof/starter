@@ -1,9 +1,7 @@
-@import "../../style/variable";
-
 .grid_wrapper {
     width: 100%;
     display: grid;
-    grid-template-columns: repeat(auto-fit , minmax(200px, 1fr));
+    grid-template-columns: repeat(3, minmax(350px, 1fr));
     padding: 25px;
     grid-gap: 25px;
     max-height: 90%;

@@ -8,11 +8,11 @@
     justify-content: space-between;
     align-items: center;
     padding: 0.5em;
-    background-color : $tertiary;
+    background-color: $tertiary;
 
     &-logo {
         width: 15%;
-        display :flex;
+        display: flex;
         object-fit: contain;
         height: 100%;
 
@@ -47,21 +47,24 @@
 }
 
 .add_post {
-    width : 50px;
+    width: 50px;
     height: 50px;
     position: fixed;
-    right : 15px;
+    right: 15px;
     bottom: 15px;
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 50%;
     background-color: $secondary;
+    border: none;
 
-    &:hover > svg , &:active > svg {
+    &:hover>svg,
+    &:active>svg {
         color: black;
         scale: 1.1;
     }
+
     svg {
         color: $primary;
         transition: all 0.3s;

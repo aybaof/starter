@@ -132,12 +132,24 @@ button {
 
 input {
     border: none;
-    border : 1px solid black;
+    border: 1px solid black;
     padding: 0.5em;
     border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
 
     &:focus {
         outline: none;
+    }
+}
+
+textarea {
+    resize: none;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    border: 0px;
+    padding: 0.5em;
+
+    &:focus {
+        outline: none
     }
 }
 
@@ -146,6 +158,21 @@ input {
 }
 
 .btn {
+    &.rounded {
+        display: inline-block;
+        outline: 0;
+        border: none;
+        cursor: pointer;
+        padding: 0 24px;
+        border-radius: 50px;
+        min-width: 200px;
+        height: 50px;
+        font-size: 18px;
+        background-color: $primary;
+        font-weight: 500;
+        color: #222;
+
+    }
 
     &-primary {
         position: relative;
@@ -233,4 +260,15 @@ html {
 
 input.invalid {
     box-shadow: inset 7px 0px 0px -3px red;
+}
+
+
+.react-icon {
+    @each $size in (18, 24, 36, 48) {
+        &.md-#{$size} {
+
+            height: unquote($size + "px");
+            width: unquote($size + "px");
+        }
+    }
 }

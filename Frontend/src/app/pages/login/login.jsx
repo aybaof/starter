@@ -1,12 +1,11 @@
 import "./login.scss";
-import React,{ useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
-import useAuth from "../auth.jsx";
+import useAuth from "../../auth.jsx";
 
-import icon from "../../assets/logo/icon-left-font-monochrome-black.png";
+import icon from "../../../assets/logo/icon-left-font-monochrome-black.png";
 
-import { toast } from "react-toastify";
 
 const Login = () => {
 
@@ -14,14 +13,19 @@ const Login = () => {
   const regexEmail = /^\S+@\S+\.\S+$/;
 
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, isConnected } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   useEffect(() => {
+    isConnected().then((state) => {
+      if (state) {
+        navigate("/dashboard")
+      }
+    })
+  }, [])
 
-  }, [email, password])
 
   const handleLogin = async () => {
     const user = {
@@ -30,7 +34,6 @@ const Login = () => {
     }
 
     const res = await login(user);
-    if (!res.success) return toast.warn("Impossible de se connecter")
     navigate("/");
   };
 

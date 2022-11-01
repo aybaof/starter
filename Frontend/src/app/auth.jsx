@@ -1,4 +1,5 @@
-import React ,{createContext , useContext , useState , useEffect} from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
+import { useCookies } from "react-cookie"
 import { AuthApi } from "../module/Api/auth";
 import { HttpInstance } from "../module/HttpClient";
 
@@ -6,53 +7,71 @@ import { HttpInstance } from "../module/HttpClient";
 const authContext = createContext();
 
 
+
 export function AuthProvider({ children }) {
 
   const [authed, setAuthed] = useState(false);
-  const [jwt , setJwt] = useState(window.localStorage.getItem("Authorization") || "")
+  const [id_user, setId_user] = useState(0)
+  const [isAdmin, setIsAdmin] = useState(false)
+  const [jwt, setJwt] = useState(window.localStorage.getItem("Authorization") || "")
 
-  useEffect (() => {
-      AuthApi.init().then(res => {
-        console.log(isAuth)
-        return false
-      });
-  },[])
+  const [cookies, setCookie, removeCookie] = useCookies("jwt");
 
-
-  useEffect( () => {
+  useEffect(() => {
     HttpInstance.setBearerAuth(jwt);
-  } , [jwt])
+  }, [jwt])
+
+  const isConnected = async () => {
+    return await AuthApi.init().then(res => {
+      if (res.success === true) {
+        setAuthed(true);
+        setId_user(res.id_user)
+        setIsAdmin(res.admin_user)
+        setJwt(window.localStorage.getItem("Authorization"));
+        return true
+      }
+      return false
+    });
+  }
 
 
   const login = async (user) => {
     const res = await AuthApi.login(user);
-    if(!res.success) return res 
+    if (!res.success) return res
     setAuthed(true)
+    setId_user(res.id_user)
+    setIsAdmin(res.admin_user)
     setJwt(res.token)
     return res
   };
 
   const signUp = async (user = {}) => {
     const res = await AuthApi.create(user);
-    if(!res.success) return res
+    if (!res.success) return res
     setAuthed(true);
     setJwt(res.token)
+    setId_user(res.id_user)
     return res
   }
 
   const signOut = () => {
-    return new Promise((res) => {
+    return new Promise(async (res) => {
       setAuthed(false);
-      res();
+      setUser_id(0);
+      window.localStorage.clear("Authorization")
+      removeCookie("jwt", { path: "/" })
     });
   };
 
   const value = {
     login: login,
     signOut: signOut,
-    signUp : signUp,
+    signUp: signUp,
+    isConnected: isConnected,
     authed: authed,
-    jwt : jwt
+    jwt: jwt,
+    isAdmin: isAdmin,
+    id_user: id_user
   };
 
   return <authContext.Provider value={value}>{children}</authContext.Provider>;

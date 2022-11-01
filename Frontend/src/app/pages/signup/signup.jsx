@@ -1,9 +1,9 @@
-import React,{useEffect , useState} from "react";
+import React, { useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
-import useAuth from "../auth.jsx"
-
-import icon from "../../assets/logo/icon-left-font-monochrome-black.png";
+import useAuth from "../../auth.jsx"
+import icon from "../../../assets/logo/icon-left-font-monochrome-black.png";
+// import icon from "../../assets/logo/icon-left-font-monochrome-black.png";
 import { toast } from "react-toastify";
 
 const SignUp = () => {
@@ -12,20 +12,20 @@ const SignUp = () => {
 	const regexEmail = /^\S+@\S+\.\S+$/;
 
 	const [isDisabled, setIsDisabled] = useState(true)
-	const [email , setEmail] = useState("");
-	const [password,setPassword] = useState("");
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
 
 	useEffect(() => {
 		setIsDisabled(!regexEmail.test(email) && !regexPassword.test(password))
-	},[email,password])
+	}, [email, password])
 
 	const navigate = useNavigate();
 	const { signUp } = useAuth();
 
 	const handleSignUp = async (e) => {
 		const user = {
-			email_user : email,
-			password_user : password
+			email_user: email,
+			password_user: password
 		}
 		const res = await signUp(user);
 		if (!res.success) return toast.warn("Impossible d'enregistrer ce compte")
@@ -44,21 +44,21 @@ const SignUp = () => {
 					<div className="form-group">
 						<label htmlFor="email_user">Email</label>
 						<input
-						className={
-							regexEmail.test(email) || email === "" ? "" : "invalid"
-						} 
-						type="text" name="email_user"
-						onChange={({currentTarget}) => setEmail(currentTarget.value)}
+							className={
+								regexEmail.test(email) || email === "" ? "" : "invalid"
+							}
+							type="text" name="email_user"
+							onChange={({ currentTarget }) => setEmail(currentTarget.value)}
 						>
 						</input>
 					</div>
 					<div className="form-group">
 						<label htmlFor="password_user">Mot de passe</label>
-						<input type="password" name="password_user" 
-						className={
-							regexPassword.test(password) || password === "" ? "" : "invalid"
-						}
-						onChange={({currentTarget}) => setPassword(currentTarget.value)}>
+						<input type="password" name="password_user"
+							className={
+								regexPassword.test(password) || password === "" ? "" : "invalid"
+							}
+							onChange={({ currentTarget }) => setPassword(currentTarget.value)}>
 						</input>
 						<p className="faded sm mt-1">Min 7 character 1 uppercase 1 lowercase 1 symbol</p>
 					</div>

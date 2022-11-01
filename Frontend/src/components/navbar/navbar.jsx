@@ -1,11 +1,22 @@
 import "./navbar.scss";
 import React from "react";
-import { Link } from "react-router-dom";
-import { CgAddR } from "react-icons/cg";
+import { useNavigate, Link } from "react-router-dom";
+import  useAuth  from "../../app/auth.jsx";
+
 
 import logo from "../../assets/logo/icon-left-font-monochrome-black.png";
 
 const Navbar = () => {
+  const { signOut } = useAuth();
+  const navigate = useNavigate();
+  const logOut = () => {
+
+    let { from } = location.state || { from: { pathname: "/" } };
+    signOut()
+    navigate("/")
+
+  }
+
   return (
     <div className="navbar">
       <div className="navbar-logo">
@@ -15,10 +26,9 @@ const Navbar = () => {
         <Link className="text_link" to="/dashboard">
           Dashboard
         </Link>
-        <Link className="add_post" to="/newPost">
-          <CgAddR/>
-        </Link>
-        <a href="#" className="text_link">Log out</a>
+        <a
+          onClick={logOut}
+          type="button" href="#" className="text_link">Log out</a>
       </div>
     </div>
   );

@@ -1,9 +1,10 @@
 import "../style/style.scss";
-import React from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
-import Login from "./login/login.jsx";
-import SignUp from "./signup/signup.jsx"
-import Dashboard from "./dashboard/dashboard.jsx";
+import React, { useEffect } from "react";
+import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
+// import {Login , SignUp , Dashboard } from "Pages/"
+import Login from "./pages/login/login.jsx";
+import SignUp from "./pages/signup/signup.jsx"
+import Dashboard from "./pages/dashboard/dashboard.jsx";
 import useAuth from "./auth.jsx";
 
 function RequireAuth({ children }) {
@@ -30,8 +31,9 @@ const App = () => {
           </RequireAuth>
         }
       />
-      <Route path="/login" element={<Login />}/>
-      <Route path="/signup" element={<SignUp/>}/>
+      <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<SignUp />} />
+      <Route element={<Login />} />
     </Routes>
   );
 };
