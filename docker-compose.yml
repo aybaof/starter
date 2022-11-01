@@ -25,6 +25,8 @@ services:
       - 4800:4800
     volumes:
       - ./:/usr/src/app
+    links: 
+      - "nodeserver"
   mariadb:
     container_name: bdd_groupomania
     image: mariadb:latest
@@ -39,6 +41,9 @@ services:
       - ./Groupomania.sql:/docker-entrypoint-initdb.d/Groupomania.sql
   nginx:
     build: ./nginx
+    depends_on:
+      - reactapp
+      - nodeserver
     ports:
       - 80:80
   phpmyadmin:

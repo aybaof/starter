@@ -6,12 +6,21 @@ module.exports = {
   entry: path.join(__dirname, "src", "index.jsx"),
   output: {
     path: path.resolve(__dirname, "dist"),
-    filename : "bundle.js",
+    filename: "bundle.js",
     assetModuleFilename: "images/[hash][ext][query]",
     publicPath: '/'
   },
-  mode : "development",
-  devtool : 'inline-source-map',
+  mode: "development",
+  devtool: 'inline-source-map',
+  resolve: {
+    alias: {
+      "Components": path.resolve(__dirname, '/src/components/'),
+      "Modules": path.resolve(__dirname, './src/module/'),
+      "Pages": path.resolve(__dirname, './src/app/pages/'),
+      "@style": path.resolve(__dirname, "./src/style"),
+      "@app": path.resolve(__dirname, "./src/app/")
+    },
+  },
   module: {
     rules: [
       {
@@ -56,14 +65,14 @@ module.exports = {
     new MiniCssExtractPlugin()
   ],
 
-  watchOptions :{
-    aggregateTimeout : 300,
-    poll : 1000
+  watchOptions: {
+    aggregateTimeout: 300,
+    poll: 1000
   },
-  devServer : {
-    port : 4800,
-    host : '0.0.0.0',
-    hot : true,
-    historyApiFallback : true,
+  devServer: {
+    port: 4800,
+    host: '0.0.0.0',
+    hot: true,
+    historyApiFallback: true,
   }
 };
