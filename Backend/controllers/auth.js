@@ -1,4 +1,4 @@
-const { linkBDD } = require("../config_bdd");
+const { User } = require("../module/model/user")
 const crypto = require("crypto");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -13,23 +13,25 @@ const passwordRequirement = {
 
 exports.signUp = async (req, res) => {
 	try {
+
 		const reqMail = await validator.trim(req.body.email_user);
 		const reqPassword = await validator.trim(req.body.password_user);
 
+		/* Integrety check */
 		if (!(await validator.isEmail(reqMail)))
 			return res.status(400).json({ success: false, reason: "Email" });
 		if (!(await validator.isStrongPassword(reqPassword, passwordRequirement)))
 			return res.status(400).json({ success: false, reason: "Password" });
 
-		const email = await validator.normalizeEmail(reqMail);
-		const password = await bcrypt.hash(reqPassword, 10);
-		const query =
-			"INSERT INTO users (email_user , password_user , admin_user) VALUES (?,?,?)";
-		const value = [email, password, 0];
-		const insertUser = await linkBDD.query(query, value);
-		if (insertUser.insertId > 0) {
+		const email = reqMail;
+
+		const userClass = new User({ email_user: email, password_user: reqPassword })
+		if (await userClass._getUser()) return res.status(400).json({ success: false, reason: "Email already used" })
+		const insertUser = await userClass._insertUser();
+
+		if (insertUser) {
 			const token = jwt.sign(
-				{ id_user: insertUser.insertId },
+				{ id_user: insertUser },
 				crypto
 					.createHash("sha256")
 					.update(process.env.TOKEN, "utf-8")
@@ -38,12 +40,12 @@ exports.signUp = async (req, res) => {
 			);
 
 			const refreshToken = jwt.sign(
-				{ id_user: insertUser.insertId },
+				{ id_user: insertUser },
 				crypto
 					.createHash("sha256")
 					.update(process.env.TOKEN, "utf-8")
 					.digest("hex"),
-				{ expireIn: "1d" }
+				{ expiresIn: "1d" }
 			);
 
 			res.cookie("jwt", refreshToken, {
@@ -53,7 +55,9 @@ exports.signUp = async (req, res) => {
 				maxAge: 24 * 60 * 60 * 1000,
 			});
 
-			return res.status(201).json({ success: true, token: token });
+			return res.status(201).json({ success: true, token: token, id_user: insertUser });
+		} else {
+			return res.status(500).json({ success: false, reason: "Une erreur c'est produite sur le serveur" });
 		}
 	} catch (err) {
 		console.log(err);
@@ -63,16 +67,21 @@ exports.signUp = async (req, res) => {
 
 exports.signIn = async (req, res) => {
 	try {
-		const reqMail = await validator.trim(req.body.email_user);
-		const reqPassword = await validator.trim(req.body.password_user);
 
-		const email = await validator.normalizeEmail(reqMail);
-		const query =
-			"SELECT id_user,password_user FROM users WHERE email_user = ?";
-		const userRequest = await linkBDD.query(query, [email]);
-		if (!userRequest)
-			return res.status(404).json({ sucess: false, reason: "not found" });
-		const user = userRequest[0];
+		/* Sanitize */
+
+
+
+		const reqMail = await validator.trim(req.body.email_user);
+		const batchSanitize = await Promise.all([validator.normalizeEmail(reqMail), validator.trim(req.body.password_user)])
+		const email = batchSanitize[0];
+		const reqPassword = batchSanitize[1];
+
+		const userClass = new User({ email_user: email, password_user: reqPassword })
+		const user = await userClass._getUser();
+		if (!user)
+			return res.status(403).json({ success: false, reason: "not found" });
+
 		const authorize = await bcrypt.compare(reqPassword, user.password_user);
 		if (!authorize) return res.status(401).json({ success: false });
 
@@ -95,15 +104,15 @@ exports.signIn = async (req, res) => {
 		);
 
 		res.cookie("jwt", refreshToken, {
-			httpOnly: true,
-			sameSite: "None",
+			httpOnly: false,
+			sameSite: "Lax",
 			secure: true,
 			maxAge: 24 * 60 * 60 * 1000,
 		});
 
 		res.setHeader("Refresh-Token", token);
 
-		return res.status(200).json({ success: true, token: token });
+		return res.status(200).json({ success: true, token: token, id_user: user.id_user, admin_user: user.admin_user });
 	} catch (error) {
 		return res.status(500).json({ success: false });
 	}
@@ -120,8 +129,10 @@ exports.authWithjwt = async (req, res) => {
 			{ expiresIn: "30m" }
 
 		)
-		req.headers.authorization = `Bearer ${accessToken}`;
-		res.status(200)
+		const user = new User({ id_user: decoded.id_user })
+		const detailUser = await user._getUser();
+		res.setHeader("Refresh-Token", accessToken)
+		res.status(200).json({ success: true, id_user: decoded.id_user, admin_user: detailUser.admin_user })
 	} catch (err) {
 		res.status(401).json({ error: new Error('Invalid request') })
 	}

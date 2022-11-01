@@ -1,7 +1,7 @@
 const auth = require("./auth")
-const feed = require("./feed")
+const userPost = require("./userPost")
 
 module.exports = {
     auth,
-    feed
+    userPost
 }
