@@ -43,18 +43,18 @@ const Card = ({ post, stateChanger, postProps }) => {
 				<div className="action_wrapper">
 					<span>{post.count_like_post || "0"} likes</span>
 					<div className="button_wrapper">
-						{canModify &&
+						{canModify ?
 							<>
 								<button onClick={() => stateChanger(post)}><MdEdit></MdEdit></button>
 								<button onClick={deletePost}><MdDeleteOutline></MdDeleteOutline></button>
-							</>
+							</> : null
 						}
 						<button>
 							{
 								isLiked && <MdFavorite onClick={likePost} color="red"></MdFavorite>
 							}
 							{
-								!isLiked && <MdFavoriteBorder onClick={likePost}></MdFavoriteBorder>
+								!isLiked ? <MdFavoriteBorder onClick={likePost}></MdFavoriteBorder> : null
 							}
 						</button>
 					</div>

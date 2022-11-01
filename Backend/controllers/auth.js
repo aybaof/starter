@@ -49,9 +49,9 @@ exports.signUp = async (req, res) => {
 			);
 
 			res.cookie("jwt", refreshToken, {
-				httpOnly: true,
-				sameSite: "None",
-				secure: true,
+				httpOnly: false,
+				sameSite: "Lax",
+				secure: false,
 				maxAge: 24 * 60 * 60 * 1000,
 			});
 
@@ -86,7 +86,7 @@ exports.signIn = async (req, res) => {
 		if (!authorize) return res.status(401).json({ success: false });
 
 		const token = jwt.sign(
-			{ id_user: user.id_user },
+			{ id_user: user.id_user, admin_user: user.admin_user },
 			crypto
 				.createHash("sha256")
 				.update(process.env.TOKEN, "utf-8")
@@ -95,7 +95,7 @@ exports.signIn = async (req, res) => {
 		);
 
 		const refreshToken = jwt.sign(
-			{ id_user: user.id_user },
+			{ id_user: user.id_user, admin_user: user.admin_user },
 			crypto
 				.createHash("sha256")
 				.update(process.env.TOKEN, "utf-8")
@@ -106,7 +106,7 @@ exports.signIn = async (req, res) => {
 		res.cookie("jwt", refreshToken, {
 			httpOnly: false,
 			sameSite: "Lax",
-			secure: true,
+			secure: false,
 			maxAge: 24 * 60 * 60 * 1000,
 		});
 
@@ -124,7 +124,7 @@ exports.authWithjwt = async (req, res) => {
 		refreshToken = req.cookies.jwt
 		const decoded = jwt.verify(refreshToken, crypto.createHash("sha256").update(process.env.TOKEN, "utf-8").digest("hex"))
 		const accessToken = jwt.sign(
-			{ id_user: decoded.id_user },
+			{ id_user: decoded.id_user, admin_user: decoded.admin_user },
 			crypto.createHash("sha256").update(process.env.TOKEN, "utf-8").digest("hex"),
 			{ expiresIn: "30m" }
 
@@ -132,7 +132,7 @@ exports.authWithjwt = async (req, res) => {
 		const user = new User({ id_user: decoded.id_user })
 		const detailUser = await user._getUser();
 		res.setHeader("Refresh-Token", accessToken)
-		res.status(200).json({ success: true, id_user: decoded.id_user, admin_user: detailUser.admin_user })
+		res.status(200).json({ success: true, id_user: decoded.id_user, admin_user: decoded.admin_user })
 	} catch (err) {
 		res.status(401).json({ error: new Error('Invalid request') })
 	}

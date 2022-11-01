@@ -57,7 +57,7 @@ export function AuthProvider({ children }) {
   const signOut = () => {
     return new Promise(async (res) => {
       setAuthed(false);
-      setUser_id(0);
+      setId_user(null);
       window.localStorage.clear("Authorization")
       removeCookie("jwt", { path: "/" })
     });

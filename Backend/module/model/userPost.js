@@ -4,10 +4,11 @@ const { deleteImg } = require("../../global_function.js")
 
 
 class UserPost extends MyDataBase {
-    constructor(userPost = {}, id_user) {
+    constructor(userPost = {}, user) {
         super()
 
-        this.id_user = id_user
+        this.id_user = user.id_user
+        this.admin_user = user.admin_user
         this.toggleLike = userPost.toggleLike
 
         this.id_post = userPost.id_post
@@ -51,7 +52,7 @@ class UserPost extends MyDataBase {
             const queryPost = `
             UPDATE ${this.contentTable} A INNER JOIN ${this.defaultTable} B ON A.id_post_post_content = B.id_post
             SET A.id_post_post_content = ? , A.img_post_content = ? , A.text_post_content = ?
-            WHERE B.id_user_post = ? AND A.id_post_content = ?`
+            WHERE (B.id_user_post = ? OR ${this.admin_user}=true) AND A.id_post_content = ?`
             const valuePost = [this.id_post_content, this.img_post_content, this.text_post_content, this.id_user_post, this.id_post_content];
             const commit = await this._commit(queryPost, valuePost);
             return commit;
@@ -95,9 +96,9 @@ class UserPost extends MyDataBase {
     async _deletePost() {
         const query = `
         DELETE FROM ${this.defaultTable}
-        WHERE id_post = ?
+        WHERE id_post = ? AND (id_user_post = ? OR ${this.admin_user}=true)
         `
-        const value = [this.id_post];
+        const value = [this.id_post, this.id_user];
         const isDeleted = await this._commit(query, value)
         if (isDeleted && this.img_post_content) {
             deleteImg(this.img_post_content);
