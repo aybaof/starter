@@ -29,13 +29,17 @@ export class HttpClient {
                 ...options
             })
 
+
+            const data = await res.json()
+
+            if (!data.success && data.reason) toast.warn(data.reason)
+
             if (!res.ok) {
-                toast.warn(res.reason)
                 throw new Error(res.statusText);
             }
 
             if (options.parseReponse !== false && res.status !== 204) {
-                const data = await res.json()
+
                 const newToken = res.headers.get("Refresh-Token") || false
                 if (newToken) {
                     this.setBearerAuth(newToken)

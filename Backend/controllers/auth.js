@@ -80,10 +80,10 @@ exports.signIn = async (req, res) => {
 		const userClass = new User({ email_user: email, password_user: reqPassword })
 		const user = await userClass._getUser();
 		if (!user)
-			return res.status(403).json({ success: false, reason: "not found" });
+			return res.status(403).json({ success: false, reason: "Aucun utilisateur trouvée" });
 
 		const authorize = await bcrypt.compare(reqPassword, user.password_user);
-		if (!authorize) return res.status(401).json({ success: false });
+		if (!authorize) return res.status(401).json({ success: false, reason: "Verifier vos informations d'identification" });
 
 		const token = jwt.sign(
 			{ id_user: user.id_user, admin_user: user.admin_user },

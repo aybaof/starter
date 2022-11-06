@@ -46,7 +46,8 @@ function ModalPost({ stateChanger, post, postProps }) {
 			stateChanger(false);
 			post.id_post_content ?
 				postProps.setPostList(postProps.postList.map(arrayPost => arrayPost.id_post_content == res.data.id_post_content ? res.data : arrayPost))
-				: postProps.setPostList([...postProps.postList, res.data])
+				: postProps.setPostList([res.data, ...postProps.postList])
+
 		}
 
 

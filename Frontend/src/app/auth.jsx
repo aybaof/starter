@@ -58,6 +58,7 @@ export function AuthProvider({ children }) {
     return new Promise(async (res) => {
       setAuthed(false);
       setId_user(null);
+      setIsAdmin(false)
       window.localStorage.clear("Authorization")
       removeCookie("jwt", { path: "/" })
     });
