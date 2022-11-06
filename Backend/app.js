@@ -8,8 +8,6 @@ const cookieparser = require("cookie-parser");
 const jwtMiddleware = require("./middleware/jwt")
 
 
-initBdd()
-
 const app = express();
 
 var dir = path.join(__dirname, 'public/images');

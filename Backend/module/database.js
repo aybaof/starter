@@ -9,9 +9,9 @@ class MyDataBase {
 
     async _fetch(query, value) {
         try {
-            const pool = linkBDD()
+            const pool = await linkBDD()
             const response = await pool.query(query, value)
-            pool.end()
+            await pool.end()
             return response.length > 0 ? response[0] : false;
         } catch (err) {
             console.log(err)
@@ -20,9 +20,9 @@ class MyDataBase {
 
     async _fetchAll(query, value) {
         try {
-            const pool = linkBDD();
+            const pool = await linkBDD();
             const response = await pool.query(query, value)
-            pool.end()
+            await pool.end()
             return response.length > 0 ? response : false;
         } catch (err) {
             console.log(err)
@@ -30,39 +30,40 @@ class MyDataBase {
     }
 
     async _commit(query, value) {
-        const MylinkBDD = linkBDD()
-        const connection = await MylinkBDD.getConnection();
+        const MylinkBDD = await linkBDD()
+        const connection = await MylinkBDD.getConnection()
         try {
             connection.beginTransaction();
             const operation = await connection.query(query, value);
             const commit = await connection.commit();
-            connection.end();
+            await connection.release();
+            await MylinkBDD.end();
             return Number(operation.insertId || operation.affectedRows)
         } catch (err) {
             connection.rollback();
-            connection.end();
+            await connection.release();
             return false
         }
     }
 
-    async _commitBatch(batch = [{ sql, value }]) {
-        const connection = await this.linkBDD.getConnection();
-        try {
-            const resultId = []
-            connection.beginTransaction
-            for (const query of batch) {
-                const operation = await connection.query(query.sql, value)
-                resultId.push(operation.insertId);
-            }
-            await connection.commit();
-            connection.end();
-            return resultId;
-        } catch (err) {
-            connection.rollback();
-            connection.end();
-            return false
-        }
-    }
+    // async _commitBatch(batch = [{ sql, value }]) {
+    //     const connection = await this.linkBDD.getConnection();
+    //     try {
+    //         const resultId = []
+    //         connection.beginTransaction
+    //         for (const query of batch) {
+    //             const operation = await connection.query(query.sql, value)
+    //             resultId.push(operation.insertId);
+    //         }
+    //         await connection.commit();
+    //         await connection.end();
+    //         return resultId;
+    //     } catch (err) {
+    //         await connection.rollback();
+    //         await connection.end();
+    //         return false
+    //     }
+    // }
 }
 
 exports.MyDataBase = MyDataBase
