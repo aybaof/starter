@@ -25,7 +25,7 @@ const Card = ({ post, stateChanger, postProps }) => {
 		if (res.success) {
 			setIsLiked(isLiked ? false : true)
 			postProps.setPostList(postProps.postList.map(renderedPost => {
-				if (renderedPost.id_post) renderedPost.count_like_post += post.toggleLike
+				if (renderedPost.id_post === post.id_post) renderedPost.count_like_post += post.toggleLike
 				return renderedPost;
 			}))
 		}
