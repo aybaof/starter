@@ -9,7 +9,7 @@ class MyDataBase {
 
     async _fetch(query, value) {
         try {
-            const pool = await linkBDD()
+            const pool = linkBDD()
             const response = await pool.query(query, value)
             await pool.end()
             return response.length > 0 ? response[0] : false;
@@ -20,7 +20,7 @@ class MyDataBase {
 
     async _fetchAll(query, value) {
         try {
-            const pool = await linkBDD();
+            const pool = linkBDD();
             const response = await pool.query(query, value)
             await pool.end()
             return response.length > 0 ? response : false;
@@ -30,7 +30,7 @@ class MyDataBase {
     }
 
     async _commit(query, value) {
-        const MylinkBDD = await linkBDD()
+        const MylinkBDD = linkBDD()
         const connection = await MylinkBDD.getConnection()
         try {
             connection.beginTransaction();

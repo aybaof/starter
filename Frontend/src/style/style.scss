@@ -61,6 +61,16 @@ $name in ("t": "top", "r": "right", "b": "bottom", "l": "left") {
     }
 }
 
+@for $index from 0 through 5 {
+    .p-#{$index} {
+        padding: calc(0.5rem * $index);
+    }
+
+    .m-#{index} {
+        margin: calc(0.5rem * $index);
+    }
+}
+
 @each $name in (start, center, end) {
     .text-#{$name} {
         text-align: $name;
@@ -83,7 +93,7 @@ $i: 0;
     $val: auto;
     $k: $val;
 
-    @if $i  !=0 {
+    @if $i !=0 {
         $val: unquote(($i)+'%');
         $k: $i;
     }
@@ -108,7 +118,7 @@ $size in $grid-breakpoints {
             $val: auto;
             $k: $val;
 
-            @if $i  !=0 {
+            @if $i !=0 {
                 $val: unquote(($i)+'%');
                 $k: $i;
             }
@@ -158,13 +168,17 @@ textarea {
 }
 
 .btn {
+    appearance: none;
+    background-color: transparent;
+    border: 0;
+
     &.rounded {
         display: inline-block;
         outline: 0;
         border: none;
         cursor: pointer;
         padding: 0 24px;
-        border-radius: 50px;
+        border-radius: 500px;
         min-width: 200px;
         height: 50px;
         font-size: 18px;

@@ -30,21 +30,17 @@ exports.initBdd = async () => {
   }
 };
 
-exports.linkBDD = async () => {
-  try {
-    return mariadb.createPool({
-      host: process.env.DB_HOST,
-      user: process.env.DB_USER,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_GROUPOMANIA,
-      trace: true,
-      connectionLimit: 30000,
-    });
-  } catch (err) {
-    await initBdd()
-    return linkBDD();
-  }
-}
+exports.linkBDD = () =>
+  mariadb.createPool({
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_GROUPOMANIA,
+    trace: true,
+    connectionLimit: 10,
+  });
+
+
 
 exports.pingBdd = () => {
   const conn = mariadb.createPool({

@@ -1,11 +1,25 @@
+@import "../../../style/variable";
+
+
 .grid_wrapper {
     width: 100%;
     display: grid;
-    grid-template-columns: repeat(3, minmax(350px, 1fr));
+    grid-template-columns: repeat(1, minmax(80%, 1fr));
     padding: 25px;
     grid-gap: 25px;
     max-height: 90%;
     overflow-y: scroll;
+
+    @media screen and (min-width : $medium_screen) {
+        grid-template-columns: repeat(2, minmax(40%, 1fr));
+    }
+
+    @media screen and (min-width : $large_screen) {
+        grid-template-columns: repeat(3, minmax(30%, 1fr));
+    }
+
+
+
 
     &::-webkit-scrollbar {
         width: 0px;

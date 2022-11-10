@@ -27,9 +27,15 @@
   flex-flow: column;
   align-items: center;
   justify-content: space-around;
-  height: 80%;
+  height: 100%;
+  width: 100%;
   background-color: white;
   border-radius: 5px;
+
+  @media screen and (min-width : $large_screen) {
+    height: 80%;
+    width: auto;
+  }
 
   .form_wrapper {
     justify-content: space-around;

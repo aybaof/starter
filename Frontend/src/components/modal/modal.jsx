@@ -8,7 +8,7 @@ function Modal({ children, stateChanger }) {
             <div className='modal'>
                 <div className='header'>
                     <h2>Nouveau feed</h2>
-                    <MdClose className='md-24' onClick={() => stateChanger(false)}></MdClose>
+                    <button className='btn p-2'><MdClose className='md-36' onClick={() => stateChanger(false)}></MdClose></button>
                 </div>
                 {children}
             </div>

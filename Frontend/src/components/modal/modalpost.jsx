@@ -55,9 +55,11 @@ function ModalPost({ stateChanger, post, postProps }) {
 
 	return (
 		<>
-			<div className='file_wrapper'>
-				<input onChange={onSelectFile} type="file"></input>
-				{(file || img) && <div className='img_wrapper'><img src={preview || img}></img></div> || !file && <MdOutlineFileUpload className='md-24'></MdOutlineFileUpload>}
+			<div className='form-group'>
+				<div className='file_wrapper'>
+					<input onChange={onSelectFile} type="file"></input>
+					{(file || img) && <div className='img_wrapper'><img src={preview || img}></img></div> || !file && <MdOutlineFileUpload className='md-24'></MdOutlineFileUpload>}
+				</div>
 			</div>
 			<div className='form-group'>
 				<label htmlFor="post_text">Contenu du post</label>
