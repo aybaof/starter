@@ -63,7 +63,7 @@ class UserPost extends MyDataBase {
 
     async _getPost() {
         try {
-            const condition = this.id_post ? "WHERE id_post=?" : "";
+            const condition = this.id_post ? "WHERE A.id_post=?" : "";
             const query = `
         SELECT * FROM ${this.defaultTable} A
         INNER JOIN ${this.contentTable} B ON A.id_post=B.id_post_post_content

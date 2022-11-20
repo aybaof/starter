@@ -21,8 +21,8 @@ const Dashboard = () => {
     <React.Fragment>
       <Navbar></Navbar>
       <div className="grid_wrapper">
-        {postList.map((post) => {
-          return <Card post={post} postProps={{ postList: postList, setPostList: setPostList }} stateChanger={setRenderModal} key={post.id_post}></Card>
+        {postList.map((post, index) => {
+          return <Card post={post} postProps={{ postList: postList, setPostList: setPostList }} stateChanger={setRenderModal} key={index}></Card>
         })}
       </div>
       <button onClick={() => setRenderModal({})} className="add_post">

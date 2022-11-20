@@ -35,7 +35,7 @@ class MyDataBase {
         try {
             connection.beginTransaction();
             const operation = await connection.query(query, value);
-            const commit = await connection.commit();
+            await connection.commit();
             await connection.release();
             await MylinkBDD.end();
             return Number(operation.insertId || operation.affectedRows)

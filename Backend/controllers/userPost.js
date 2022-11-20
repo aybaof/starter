@@ -9,7 +9,7 @@ exports.addPost = async (req, res) => {
     const userPost = new UserPost(data, req.user);
     const operation = userPost.id_post_content ? await userPost._updatePost() : await userPost._insertPost();
     if (!operation) return res.status(500).json({ success: false, reason: "Operation impossible" })
-    res.status(200).json({ success: true, data: userPost })
+    res.status(200).json({ success: true, data: await userPost._getPost(userPost.id_post) })
 
 }
 

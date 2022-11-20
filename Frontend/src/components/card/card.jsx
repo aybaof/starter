@@ -8,8 +8,8 @@ import { UserPostApi } from "../../module/Api/userPost";
 import { MdFavorite, MdFavoriteBorder, MdEdit, MdDeleteOutline } from "react-icons/md";
 
 const Card = ({ post, stateChanger, postProps }) => {
-	const [isLiked, setIsLiked] = useState(post.id_user_like_post ? true : false);
 	const { id_user, isAdmin } = useAuth();
+	const [isLiked, setIsLiked] = useState(post.id_user_like_post === id_user ? true : false);
 	const canModify = id_user === post.id_user_post || isAdmin;
 
 	const deletePost = async () => {
