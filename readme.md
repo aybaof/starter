@@ -1,8 +1,8 @@
 * Requirement :
 
-⋅⋅* Docker
-⋅⋅* Docker compose
-..* Port 80 && 4800 & 5000 libre
+1. Docker
+2. Docker compose
+3. Port 80 && 4800 & 5000 libre
 
 * Configuration :
 
