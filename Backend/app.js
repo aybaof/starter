@@ -1,7 +1,6 @@
 const express = require("express");
 const path = require("path")
 
-const { initBdd, pingbdd } = require("./config_bdd")
 const appRoute = require("./router/default.js")
 const cookieparser = require("cookie-parser");
 

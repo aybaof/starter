@@ -1,5 +1,5 @@
 const { MyDataBase } = require("../database.js");
-const { deleteImg } = require("../../global_function.js")
+const { deleteImg } = require("../../module/global_function")
 
 
 

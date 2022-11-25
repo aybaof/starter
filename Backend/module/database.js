@@ -1,4 +1,4 @@
-const { linkBDD } = require("../config_bdd.js");
+const { linkBDD } = require("./config_bdd");
 
 
 class MyDataBase {
@@ -45,25 +45,6 @@ class MyDataBase {
             return false
         }
     }
-
-    // async _commitBatch(batch = [{ sql, value }]) {
-    //     const connection = await this.linkBDD.getConnection();
-    //     try {
-    //         const resultId = []
-    //         connection.beginTransaction
-    //         for (const query of batch) {
-    //             const operation = await connection.query(query.sql, value)
-    //             resultId.push(operation.insertId);
-    //         }
-    //         await connection.commit();
-    //         await connection.end();
-    //         return resultId;
-    //     } catch (err) {
-    //         await connection.rollback();
-    //         await connection.end();
-    //         return false
-    //     }
-    // }
 }
 
 exports.MyDataBase = MyDataBase
