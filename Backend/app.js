@@ -3,11 +3,15 @@ const path = require("path")
 
 const appRoute = require("./router/default.js")
 const cookieparser = require("cookie-parser");
+const helmet = require("helmet");
 
 const jwtMiddleware = require("./middleware/jwt")
 
 
 const app = express();
+app.use(helmet());
+
+
 
 var dir = path.join(__dirname, 'public/images');
 app.use("/api/images", express.static(dir));

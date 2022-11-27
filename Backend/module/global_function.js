@@ -7,7 +7,7 @@ exports.sleep = (ms) => {
 
 exports.deleteImg = (fileName) => {
         const dir = path.join(__dirname, 'public/images/');
-        fs.unlink(dir + fileName, (err) => {
+        fs.unlink(dir + fileName.replace(" ", "_"), (err) => {
                 if (err) {
                         console.log(err)
                 }

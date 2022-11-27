@@ -9,7 +9,7 @@ import { MdFavorite, MdFavoriteBorder, MdEdit, MdDeleteOutline, } from "react-ic
 
 const Card = ({ post, stateChanger, postProps }) => {
 	const { id_user, isAdmin } = useAuth();
-	const [isLiked, setIsLiked] = useState(post.id_user_like_post === id_user && id_user ? true : false);
+	const [isLiked, setIsLiked] = useState(post.id_user_user_like_post === id_user && id_user ? true : false);
 	const canModify = id_user === post.id_user_post || isAdmin;
 
 	const deletePost = async () => {
