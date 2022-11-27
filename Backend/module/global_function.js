@@ -6,12 +6,10 @@ exports.sleep = (ms) => {
 }
 
 exports.deleteImg = (fileName) => {
-        const dir = path.join(__dirname, 'public/images/');
-        fs.unlink(dir + fileName.replace(" ", "_"), (err) => {
+        const dir = path.join(__dirname, '..', 'public/images/');
+        fs.unlink(dir + fileName, (err) => {
                 if (err) {
                         console.log(err)
                 }
-
-                console.log("Delete File successfully.");
         });
 }

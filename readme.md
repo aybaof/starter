@@ -1,22 +1,22 @@
-* Requirement :
+- Requirement :
 
 1. Docker
 2. Docker compose
 3. Port 80 && 4800 & 5000 libre
 
-* Configuration :
+- Configuration :
 
 1. .env a la racine du dossier
-2. Groupomania.sql a la racine du dosser
+2. barakat_aymeric_2_bdd_082022.sql a la racine du dosser
 
-* Installation du project :
+- Installation du project :
 
-A la racine du projet 
+A la racine du projet
 
 ```
 docker compose up --build
 ```
 
-* Consultation du projet :
+- Consultation du projet :
 
 http://localhost:80/
