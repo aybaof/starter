@@ -5,7 +5,7 @@ import useAuth from "../../app/auth.jsx"
 import { UserPostApi } from "../../module/Api/userPost";
 
 
-import { MdFavorite, MdFavoriteBorder, MdEdit, MdDeleteOutline } from "react-icons/md";
+import { MdFavorite, MdFavoriteBorder, MdEdit, MdDeleteOutline, } from "react-icons/md";
 
 const Card = ({ post, stateChanger, postProps }) => {
 	const { id_user, isAdmin } = useAuth();
@@ -35,7 +35,7 @@ const Card = ({ post, stateChanger, postProps }) => {
 	return (
 		<div className="card_wrapper">
 			<div className="img_wrapper">
-				<img src={window.location.origin + "/api/images/" + post.img_post_content}></img>
+				{post.img_post_content && <img src={window.location.origin + "/api/images/" + post.img_post_content}></img>}
 			</div>
 			<div className="card_body">
 				<div className="text_wrapper">

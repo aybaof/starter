@@ -38,7 +38,7 @@ function ModalPost({ stateChanger, post, postProps }) {
 		if (!file && !content) return toast.warn("Veuillez ajoutez une image ou du texte")
 		const formData = new FormData();
 		for (const [key, value] of Object.entries(post)) if (value) formData.set(key, value)
-		formData.set("img_post_content", file || post.img_post_content);
+		if (file || post.img_post_content) formData.set("img_post_content", file || post.img_post_content);
 		formData.set("text_post_content", content);
 		formData.set("id_user", id_user)
 		const res = await UserPostApi.newPost(formData)
@@ -46,7 +46,7 @@ function ModalPost({ stateChanger, post, postProps }) {
 			stateChanger(false);
 			post.id_post_content ?
 				postProps.setPostList(postProps.postList.map(arrayPost => arrayPost.id_post_content == res.data.id_post_content ? res.data : arrayPost))
-				: postProps.setPostList([res.data, ...postProps.postList])
+				: postProps.setPostList([res.data, ...postProps.postList].map(arrayPost => arrayPost));
 
 		}
 

@@ -22,7 +22,7 @@ const Dashboard = () => {
       <Navbar></Navbar>
       <div className="grid_wrapper">
         {postList.map((post, index) => {
-          return <Card post={post} postProps={{ postList: postList, setPostList: setPostList }} stateChanger={setRenderModal} key={index}></Card>
+          return <Card post={post} postProps={{ postList: postList, setPostList: setPostList }} stateChanger={setRenderModal} key={post.id_post}></Card>
         })}
       </div>
       <button onClick={() => setRenderModal({})} className="add_post">
