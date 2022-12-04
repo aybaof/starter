@@ -53,7 +53,7 @@ class UserPost extends MyDataBase {
             UPDATE ${this.contentTable} A INNER JOIN ${this.defaultTable} B ON A.id_post_post_content = B.id_post
             SET A.id_post_post_content = ? , A.img_post_content = ? , A.text_post_content = ?
             WHERE (B.id_user_post = ? OR ${this.admin_user}=true) AND A.id_post_content = ?`
-            const valuePost = [this.id_post_content, this.img_post_content, this.text_post_content, this.id_user_post, this.id_post_content];
+            const valuePost = [this.id_post_content, this.img_post_content || null, this.text_post_content, this.id_user_post, this.id_post_content];
             const commit = await this._commit(queryPost, valuePost);
             return commit;
         } catch (err) {
